@@ -2,26 +2,39 @@ package main
 
 import (
 	"encoding/json"
+	"flag"
 	"fmt"
-	"log"
 	"os"
 
 	"github.com/deploymenttheory/terraform-tools-jamfpro/tools/models"
 )
 
 func main() {
-	// Load your Terraform plan JSON file
-	planFilePath := "path/to/your/terraform/plan.json"
-	planJson, err := os.ReadFile(planFilePath)
-	if err != nil {
-		log.Fatalf("Failed to read Terraform plan file: %v", err)
+	// Define a string flag for the Terraform plan file path
+	tfPlanPath := flag.String("tfplan", "", "Path to the Terraform plan file in JSON format")
+
+	// Parse the command-line flags
+	flag.Parse()
+
+	// Check if the tfplan flag has been set
+	if *tfPlanPath == "" {
+		fmt.Println("Usage: -tfplan <path to terraform plan json>")
+		return
 	}
 
-	// Unmarshal the JSON into your TerraformPlan struct
-	var plan models.TerraformPlan
-	err = json.Unmarshal(planJson, &plan)
+	// Read the Terraform plan from the file using os.ReadFile
+	planFile, err := os.ReadFile(*tfPlanPath)
 	if err != nil {
-		log.Fatalf("Failed to unmarshal Terraform plan: %v", err)
+		fmt.Printf("Error reading plan file: %v\n", err)
+		return
+	}
+
+	// Unmarshal the JSON into the TerraformPlan struct
+	var plan models.TerraformPlan
+	err = json.Unmarshal(planFile, &plan)
+	if err != nil {
+		fmt.Printf("Error unmarshalling JSON: %v\n", err)
+		return
 	}
 
 	// Iterate over ResourceChanges to identify CRUD operations
