@@ -9,6 +9,11 @@ import (
 	"github.com/deploymenttheory/terraform-tools-jamfpro/tools/models"
 )
 
+// Privileges represents the structure of the JSON containing Jamf Pro privileges
+type Privileges struct {
+	Privileges []string `json:"privileges"`
+}
+
 func main() {
 	// Define a string flag for the Terraform plan file path
 	tfPlanPath := flag.String("tfplan", "", "Path to the Terraform plan file in JSON format")
