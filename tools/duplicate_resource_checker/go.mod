@@ -1,4 +1,4 @@
-module github.com/deploymenttheory/terraform-tools-jamfpro/tools/duplicate
+module github.com/deploymenttheory/terraform-tools-jamfpro/tools/dupcheck
 
 go 1.21.4
 
